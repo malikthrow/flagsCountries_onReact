@@ -4,21 +4,36 @@ import {ALL_COUNTRY} from "../config";
 import {Controls} from "../components/Controls";
 import List from "../components/List";
 import Card from "../components/Card";
-import Main from "../components/Main";
+import {useLocation, useNavigate} from "react-router-dom";
 
-const HomePage = () => {
-    const [countries,setCountries] = useState([])
+const HomePage = ({countries, setCountries}) => {
+    const [filtered,setFiltered] = useState(countries)
+
+    const navigate = useNavigate();
+
+    const handleSearch = (searchWord,region)=>{
+        let data = [...countries];
+        if (region){
+            data = data.filter(c=>c.region.includes(region))
+        }
+        if (searchWord){
+            data = data.filter(c=>c.name.toLowerCase().includes(searchWord.toLowerCase()))
+        }
+        setFiltered(data)
+    }
 
     useEffect(()=>{
+        if (!countries.length){
         axios.get(ALL_COUNTRY)
             .then(({data})=>setCountries(data))
+        }
     },[])
 
     return (
         <>
-                <Controls/>
+                <Controls onSearch={handleSearch}/>
                 <List>
-                    {countries.map(el=>{
+                    {filtered.map(el=>{
                         const countryInfo = {
                             img: el.flags.png,
                             name: el.name,
@@ -37,7 +52,8 @@ const HomePage = () => {
                                 },
                             ],
                         };
-                        return <Card key={el.name} {...countryInfo}/>
+                        return <Card key={el.name} {...countryInfo} onClick={()=>navigate(`/country/${el.name}`)} />
+
                     })}
                 </List>
 
