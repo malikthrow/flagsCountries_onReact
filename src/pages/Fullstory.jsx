@@ -4,6 +4,7 @@ import {IoArrowBack} from "react-icons/io5";
 import axios from "axios";
 import {searchByCountry} from "../config";
 import {Button} from "../components/Button";
+import Info from "../components/Info";
 
 const Fullstory = () => {
     const {name} = useParams();
@@ -19,6 +20,7 @@ const Fullstory = () => {
     return (
         <div>
             <Button onClick={() => navigate(-1)}><IoArrowBack/>Back</Button>
+            {country && <Info {...country} />}
             {name}
         </div>
     );

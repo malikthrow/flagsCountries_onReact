@@ -6,6 +6,7 @@ import List from "../components/List";
 import Card from "../components/Card";
 import {useLocation, useNavigate} from "react-router-dom";
 
+
 const HomePage = ({countries, setCountries}) => {
     const [filtered,setFiltered] = useState(countries)
 
@@ -18,6 +19,7 @@ const HomePage = ({countries, setCountries}) => {
         }
         if (searchWord){
             data = data.filter(c=>c.name.toLowerCase().includes(searchWord.toLowerCase()))
+
         }
         setFiltered(data)
     }
@@ -33,7 +35,9 @@ const HomePage = ({countries, setCountries}) => {
         <>
                 <Controls onSearch={handleSearch}/>
                 <List>
+
                     {filtered.map(el=>{
+                        console.log(111111)
                         const countryInfo = {
                             img: el.flags.png,
                             name: el.name,
