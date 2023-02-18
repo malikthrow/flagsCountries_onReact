@@ -5,11 +5,12 @@ import {Controls} from "../components/Controls";
 import List from "../components/List";
 import Card from "../components/Card";
 import {useLocation, useNavigate} from "react-router-dom";
+import Lazy from "../components/Lazy";
 
 
 const HomePage = ({countries, setCountries}) => {
     const [filtered,setFiltered] = useState(countries)
-
+    const [isLazy,setIsLazy] = useState(false)
     const navigate = useNavigate();
 
     const handleSearch = (searchWord,region)=>{
@@ -25,10 +26,19 @@ const HomePage = ({countries, setCountries}) => {
     }
 
     useEffect(()=>{
+        if (!isLazy){
+            setIsLazy(true)
+        }
+      handleSearch();
+    },[countries])
+
+    useEffect(()=>{
         if (!countries.length){
         axios.get(ALL_COUNTRY)
             .then(({data})=>setCountries(data))
+            .then(()=>setIsLazy(true))
         }
+
     },[])
 
     return (
@@ -36,8 +46,7 @@ const HomePage = ({countries, setCountries}) => {
                 <Controls onSearch={handleSearch}/>
                 <List>
 
-                    {filtered.map(el=>{
-                        console.log(111111)
+                    {isLazy ? filtered.map(el=>{
                         const countryInfo = {
                             img: el.flags.png,
                             name: el.name,
@@ -58,8 +67,11 @@ const HomePage = ({countries, setCountries}) => {
                         };
                         return <Card key={el.name} {...countryInfo} onClick={()=>navigate(`/country/${el.name}`)} />
 
-                    })}
+                    })
+                        : <Lazy/>
+                    }
                 </List>
+
 
         </>
     );

@@ -1,6 +1,9 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import List from "./List";
+import axios from "axios";
+import {filterByCode} from "../config";
+import {useNavigate} from "react-router-dom";
 
 const Wrapper = styled.section`
     margin-top: 3rem;
@@ -74,11 +77,21 @@ const Tag = styled.span`
     padding: 0 1rem;
     background-color: var(--colors-ui-base);
     box-shadow: var(--shadow);
+    line-height: 1.5;
+    cursor: pointer;
 `;
 
 const Info = (props) => {
     const {name,nativeName,flag,capital,population,region,subregion,topLevelDomain,currencies=[],languages=[],borders=[],push} = props
+    const [neighbors,setNeighbors] = useState([]);
+    const navigate = useNavigate();
 
+    useEffect(()=>{
+        if (borders.length){
+        axios.get(filterByCode(borders))
+            .then(({data})=>{setNeighbors(data.map(c=>c.name))})
+        }
+    },[borders])
 
     return (
         <Wrapper>
@@ -92,28 +105,29 @@ const Info = (props) => {
                             <b>Native Name:</b> {nativeName}
                         </ListItem>
                         <ListItem>
-                            <b>Population:</b> {nativeName}
+                            <b>Population:</b> {population}
                         </ListItem>
                         <ListItem>
-                            <b>Region:</b> {nativeName}
+                            <b>Region:</b> {region}
                         </ListItem>
                         <ListItem>
-                            <b>Sub region:</b> {nativeName}
+                            <b>Sub region:</b> {subregion}
                         </ListItem>
                         <ListItem>
-                            <b>Capital:</b> {nativeName}
+                            <b>Capital:</b> {capital}
                         </ListItem>
                     </Lists>
                     <Lists>
                         <ListItem>
-                            <b>Top level Domain</b>{topLevelDomain.map(el=>(<span key={el}></span>))}
+                            <b>Languages</b>{languages && languages.map(el=>(<span key={el.name}></span>))}
                         </ListItem>
                         <ListItem>
-                            <b>Currency</b>{topLevelDomain.map(c=>(<span key={c.code}>{c.name} </span>))}
+                            <b>Currency</b> {currencies && currencies.map((c,id)=>(<span key={id}>{c.name}</span>))}
                         </ListItem>
                         <ListItem>
-                            <b>Top level Domain</b>{topLevelDomain.map(l=>(<span key={l.name}>{l.name}</span>))}
+                            <b>Top level Domain</b>{topLevelDomain && topLevelDomain.map((l,id)=>(<span key={id}>{l.name}</span>))}
                         </ListItem>
+
                     </Lists>
                 </ListGroup>
                 <Meta>
@@ -121,7 +135,7 @@ const Info = (props) => {
                     {!borders.length ? (<span>No border</span>)
                         :
                         <TagGroup>
-                            {borders.map(x=>(<Tag key={x}>{x}</Tag>))}
+                            {neighbors && neighbors.map(x=>(<Tag onClick={()=>navigate(`/country/${x}`)} key={x}>{x}</Tag>))}
                         </TagGroup>
                     }
                 </Meta>

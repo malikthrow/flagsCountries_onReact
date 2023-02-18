@@ -21,7 +21,6 @@ const Fullstory = () => {
         <div>
             <Button onClick={() => navigate(-1)}><IoArrowBack/>Back</Button>
             {country && <Info {...country} />}
-            {name}
         </div>
     );
 };
