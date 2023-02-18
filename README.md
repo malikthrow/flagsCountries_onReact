@@ -1,10 +1,11 @@
 # Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![Design preview for the Time tracking dashboard coding challenge](./public/2023-02-19_015758.jpg)
+![Design preview for the Time tracking dashboard coding challenge](./public/2023-02-19_015808.jpg)
 
-## Available Scripts
+## ONLINE
 
-In the project directory, you can run:
+https://flags-countries-on-react.vercel.app/
 
 ### `npm start`
 
