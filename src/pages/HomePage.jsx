@@ -6,9 +6,11 @@ import List from "../components/List";
 import Card from "../components/Card";
 import {useLocation, useNavigate} from "react-router-dom";
 import Lazy from "../components/Lazy";
+import {useMatchMedia} from "../hooks/use-match-media";
 
 
 const HomePage = ({countries, setCountries}) => {
+    const {isMobile,isTablet,isDesktop} = useMatchMedia()
     const [filtered,setFiltered] = useState(countries)
     const [isLazy,setIsLazy] = useState(false)
     const navigate = useNavigate();
